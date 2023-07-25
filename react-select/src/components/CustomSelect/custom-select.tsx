@@ -3,7 +3,7 @@ import React, { memo, Key } from 'react';
 
 import { useSelect, useClassNames } from './utils';
 import './styles.css';
-import { MultipleLevelSelectionProps } from '../../types/global-types';
+import { MultipleLevelSelectionProps, Type } from '../../types/global-types';
 
 export function MultipleLevelSelectionComponent<TItem = string>({
   classes,

@@ -1,29 +1,52 @@
 import React, { useState } from 'react';
 import './App.css';
-import { Category } from './types/global-types'
+import { CustomSelectItem, Type } from './types/global-types'
 import MultipleLevelSelection from './components/CustomSelect/custom-select';
-import { getCategoriesByParentId } from './seeds';
 
 function App() {
-  const [category, setCategory] = useState<Category>();
+  const [item, setItem] = useState<CustomSelectItem>();
+
+  const itemsArray = [{id: '1', name: 'Name1', parentId: '0', type: Type.parent, value:{}}, 
+    {id: '2', name: 'Name2', parentId: '0', type: Type.parent, value: {}}, 
+    {id: '21', name: 'Name2', parentId: '0', type: Type.selectable, value: {}}, 
+    {id: '29', name: 'Separator1', parentId: '0', type: Type.separator, value: {}}, 
+    {id: '22', name: 'Name2', parentId: '0', type: Type.selectable, value: {}}, 
+    {id: '23', name: 'Name2', parentId: '0', type: Type.selectable, value: {}}, 
+    {id: '24', name: 'Name2', parentId: '0', type: Type.selectable, value: {}}, 
+    {id: '3', name: 'Name3', parentId: '1', type: Type.selectable, value: {}}, 
+    {id: '4', name: 'Name4', parentId: '1', type: Type.selectable, value: {}}, 
+    {id: '5', name: 'Name5', parentId: '2', type: Type.parent, value: {}}, 
+    {id: '6', name: 'Name6', parentId: '5', type: Type.selectable, value: {}},];
+    
+  const exampleItem = new CustomSelectItem();
+  
+  exampleItem.id = '7';
+  exampleItem.name = 'Name12';
+  exampleItem.parentId = '2';
+  exampleItem.type = Type.selectable;
+  exampleItem.value = {};
+  itemsArray.push(exampleItem);
+  
+  const getItemsByParentId = (parentId: string | number) => itemsArray.filter((item) => item.parentId === `${parentId}`);
+
   return (
     <div className="App">
       <main className="App-main">
         <div className="example">
           <div className="flex flex-col flex-align-start">
-            <p>Selected category: {category?.name}</p>
+            <p>Selected item: {item?.name}</p>
             <MultipleLevelSelection
-              initialItems={getCategoriesByParentId(0)}
-              getItemKey={(item) => item.categoryId}
+              initialItems={getItemsByParentId(0)}
+              getItemKey={(item) => item.id}
               getItemLabel={(item) => item.name}
               getNestedItems={(item) =>
-                getCategoriesByParentId(item.categoryId)
+                getItemsByParentId(item.id)
               }
-              hasNestedItems={(_, level) => level < 3}
-              isSeparator={(item) => item.categoryId == ''}
-              isEqual={(item, item2) => item?.categoryId === item2?.categoryId}
-              placeholder="Choose category"
-              onChange={setCategory}
+              hasNestedItems={(item) => item.type == Type.parent }
+              isEqual={(item, item2) => item?.id === item2?.id}
+              isSeparator={(item) => item.type == Type.separator}
+              placeholder="Choose item"
+              onChange={setItem}
             />
           </div>
         </div>

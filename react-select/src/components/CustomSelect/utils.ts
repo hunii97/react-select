@@ -1,6 +1,7 @@
 import { useState, useMemo, useCallback } from 'react';
 import clsx from 'clsx';
 import useToggle from '../../hooks/useToggle';
+import { UseSelectProps, ClassName } from '../../types/global-types';
 
 export const useSelect = <TItem = string>({
   placeholder,
@@ -14,28 +15,12 @@ export const useSelect = <TItem = string>({
   const [open, toggle] = useToggle();
   const [selectedItem, setSelectedItem] = useState<TItem>();
 
-  /**
-   * Rendering items by level
-   * {
-   *    1: TItem[],
-   *    2: TItem[],
-   *    ....so on
-   * }
-   */
   const [renderingItems, setRenderingItems] = useState<Record<number, TItem[]>>(
     {
       1: initialItems,
     },
   );
 
-  /**
-   * Selected item per level
-   * {
-   *   1: TItem,
-   *   2: TItem,
-   *   .... so on
-   * }
-   */
   const [selectedItems, setSelectedItems] = useState<Record<number, TItem>>();
 
   const label = useMemo(() => {
@@ -84,10 +69,8 @@ export const useSelect = <TItem = string>({
       setSelectedItems((prev) => ({ ...prev, [level]: item }));
 
       if (hasNestedItems(item, level)) {
-        // Fetch $level + 1 items
         handleGetNestedItems(item, level + 1);
       } else {
-        // Select $item and close dropdown
         setSelectedItem(item);
         onChange?.(item);
         toggle();
@@ -142,15 +125,3 @@ const classNames = [
   'levelItem',
   'levelSelectedItem',
 ] as const;
-
-export type ClassName = typeof classNames[number];
-export interface UseSelectProps<TItem> {
-  initialItems: TItem[]; // Initial items (Level 1 items)
-  placeholder: string; // Placeholder show on no item selected
-  getItemLabel: (item: TItem) => string;
-  getNestedItems: (item: TItem, level: number) => Promise<TItem[]> | TItem[]; // Get the nested level of current item & level
-  hasNestedItems: (item: TItem, level: number) => boolean; // Check if the current item at level still has nested level items
-  isSeparator: (itenm:TItem) => boolean;
-  isEqual: (item?: TItem, item2?: TItem) => boolean;
-  onChange?: (item: TItem) => void;
-}

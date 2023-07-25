@@ -1,5 +1,4 @@
 import { Key } from "react";
-import { ClassName, UseSelectProps } from "../components/CustomSelect/utils";
 
 const classNames = [
     'root',
@@ -18,8 +17,25 @@ const classNames = [
   }
 
 
-export interface Category {
-  categoryId: string;
-  parentId: string;
-  name: string;
+export class CustomSelectItem {
+  id!: string;
+  parentId!: string;
+  name!: string;
+  type!: Type;
+  value!: object;
+}
+
+export type ClassName = typeof classNames[number];
+
+export enum Type {'separator', 'parent', 'selectable'}
+
+export interface UseSelectProps<TItem> {
+  initialItems: TItem[]; // Initial items (Level 1 items)
+  placeholder: string; // Placeholder show on no item selected
+  getItemLabel: (item: TItem) => string;
+  getNestedItems: (item: TItem, level: number) => Promise<TItem[]> | TItem[]; // Get the nested level of current item & level
+  hasNestedItems: (item: TItem, level: number) => boolean; // Check if the current item at level still has nested level items
+  isSeparator: (item:TItem) => boolean;
+  isEqual: (item?: TItem, item2?: TItem) => boolean;
+  onChange?: (item: TItem) => void;
 }

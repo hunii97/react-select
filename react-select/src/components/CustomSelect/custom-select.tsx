@@ -4,6 +4,8 @@ import React, { memo } from 'react';
 import { useSelect, useClassNames } from './utils';
 import './styles.css';
 import { CustomSelectProps } from '../../types/global-types';
+import Box from '@mui/material/Box';
+import { List, ListItem } from '@mui/material';
 
 export function CustomSelectComponent<TItem = string>({
   classes,
@@ -30,16 +32,16 @@ export function CustomSelectComponent<TItem = string>({
   const classesNames = useClassNames(classes);
 
   return (
-    <div className={classesNames.root()}>
-      <div className={classesNames.overlay(open)} onClick={toggle} />
-      <div className={classesNames.selectionHeader()} onMouseEnter={toggle} onClick={toggle}>
-        <span>{label}</span>
-      </div>
+    <Box className={classesNames.root()}>
+      <Box className={classesNames.overlay(open)} onClick={toggle} />
+      <Box className={classesNames.selectionHeader()} onMouseEnter={toggle} onClick={toggle}>
+        {label}
+      </Box>
       {renderingItems && (
-        <div className={classesNames.selectionEntries(open)}>
-          <div className="flex flex-row">
+        <Box className={classesNames.selectionEntries(open)}>
+          <Box className="flex flex-row">
             {Object.keys(renderingItems).map((level: string) => (
-              <ul
+              <List
                 key={`entry-level-${level}`}
                 className={classesNames.levelEntry()}
               >
@@ -48,7 +50,7 @@ export function CustomSelectComponent<TItem = string>({
                   const nestable = hasNestedItems(item, +level);
                   if (!isSeparator(item)) {
                     return (
-                      <li
+                      <ListItem
                         key={getItemKey(item)}
                         className={classesNames.levelItem({
                           nestable,
@@ -58,23 +60,23 @@ export function CustomSelectComponent<TItem = string>({
                         onClick={handleClickItem(item, +level)}
                       >
                         {getItemLabel(item)}
-                      </li>
+                      </ListItem>
                     );
                   } else {
                     return (
-                      <li key={getItemKey(item)}
+                      <ListItem key={getItemKey(item)}
                         className={classesNames.separator()}>
                       {getItemLabel(item)}
-                    </li>
+                    </ListItem>
                     )
                   }
                 })}
-              </ul>
+              </List>
             ))}
-          </div>
-        </div>
+          </Box>
+        </Box>
       )}
-    </div>
+    </Box>
   );
 }
 

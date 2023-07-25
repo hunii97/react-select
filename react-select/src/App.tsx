@@ -1,9 +1,19 @@
 import React, { useState } from 'react';
 import './App.css';
-import { CustomSelectItem, Type } from './types/global-types'
 import CustomSelect from './components/CustomSelect/custom-select';
 
 function App() {
+
+  class CustomSelectItem {
+    id!: string;
+    parentId!: string;
+    name!: string;
+    type!: Type;
+    value!: object;
+  }
+
+  enum Type {'separator', 'parent', 'selectable'}
+
   const [item, setItem] = useState<CustomSelectItem>();
 
   // Example how can we create a dataSet!

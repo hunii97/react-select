@@ -16,18 +16,7 @@ const classNames = [
     classes?: Partial<Record<ClassName, string>>; // Custom classe names
   }
 
-
-export class CustomSelectItem {
-  id!: string;
-  parentId!: string;
-  name!: string;
-  type!: Type;
-  value!: object;
-}
-
 export type ClassName = typeof classNames[number];
-
-export enum Type {'separator', 'parent', 'selectable'}
 
 export interface UseSelectProps<TItem> {
   initialItems: TItem[];

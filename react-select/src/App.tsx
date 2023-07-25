@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import './App.css';
 import { CustomSelectItem, Type } from './types/global-types'
-import MultipleLevelSelection from './components/CustomSelect/custom-select';
+import CustomSelect from './components/CustomSelect/custom-select';
 
 function App() {
   const [item, setItem] = useState<CustomSelectItem>();
 
+  // Example how can we create a dataSet!
   const itemsArray = [{id: '1', name: 'Name1', parentId: '0', type: Type.parent, value:{}}, 
     {id: '2', name: 'Name2', parentId: '0', type: Type.parent, value: {}}, 
     {id: '21', name: 'Name2', parentId: '0', type: Type.selectable, value: {}}, 
@@ -29,13 +30,15 @@ function App() {
   
   const getItemsByParentId = (parentId: string | number) => itemsArray.filter((item) => item.parentId === `${parentId}`);
 
+  // Example of using the select
+
   return (
     <div className="App">
       <main className="App-main">
         <div className="example">
           <div className="flex flex-col flex-align-start">
             <p>Selected item: {item?.name}</p>
-            <MultipleLevelSelection
+            <CustomSelect
               initialItems={getItemsByParentId(0)}
               getItemKey={(item) => item.id}
               getItemLabel={(item) => item.name}

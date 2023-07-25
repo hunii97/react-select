@@ -65,7 +65,6 @@ export const useSelect = <TItem = string>({
         ),
       );
 
-      // Update selected items
       setSelectedItems((prev) => ({ ...prev, [level]: item }));
 
       if (hasNestedItems(item, level)) {
@@ -102,6 +101,7 @@ export const useClassNames = (
       hidden: !open,
     }),
   levelEntry: () => clsx('entry-level', classes?.levelEntry),
+  separator: () => 'separator-item',
   levelItem: ({
     nestable,
     selected,
@@ -124,4 +124,5 @@ const classNames = [
   'levelEntry',
   'levelItem',
   'levelSelectedItem',
+  'separator',
 ] as const;

@@ -1,18 +1,18 @@
 
-import React, { memo, Key } from 'react';
+import React, { memo } from 'react';
 
 import { useSelect, useClassNames } from './utils';
 import './styles.css';
-import { MultipleLevelSelectionProps, Type } from '../../types/global-types';
+import { CustomSelectProps } from '../../types/global-types';
 
-export function MultipleLevelSelectionComponent<TItem = string>({
+export function CustomSelectComponent<TItem = string>({
   classes,
   getItemKey,
   getItemLabel,
   hasNestedItems,
   isSeparator,
   ...rest
-}: MultipleLevelSelectionProps<TItem>) {
+}: CustomSelectProps<TItem>) {
   const {
     open,
     label,
@@ -62,7 +62,8 @@ export function MultipleLevelSelectionComponent<TItem = string>({
                     );
                   } else {
                     return (
-                      <li key={getItemKey(item)}>
+                      <li key={getItemKey(item)}
+                        className={classesNames.separator()}>
                       {getItemLabel(item)}
                     </li>
                     )
@@ -77,9 +78,9 @@ export function MultipleLevelSelectionComponent<TItem = string>({
   );
 }
 
-const MultipleLevelSelection = memo(
-  MultipleLevelSelectionComponent,
-) as typeof MultipleLevelSelectionComponent & React.ComponentType<any>;
-MultipleLevelSelection.displayName = 'MultipleLevelSelection';
+const CustomSelect = memo(
+  CustomSelectComponent,
+) as typeof CustomSelectComponent & React.ComponentType<any>;
+CustomSelect.displayName = 'CustomSelect';
 
-export default MultipleLevelSelection;
+export default CustomSelect;

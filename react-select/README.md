@@ -28,17 +28,27 @@ npm start
 
 ```
 <CustomSelect
-      initialItems={getItemsByParentId(0)}
+      initialItems={getItemsByParentIdFromArray2(0)}
+      anchor={{
+        vertical: 'bottom',
+        horizontal: 'right',
+      }}
+      transform={{
+        vertical: 'top',
+        horizontal: 'left',
+      }}
       getItemKey={(item) => item.id}
       getItemLabel={(item) => item.name}
       getNestedItems={(item) =>
-        getItemsByParentId(item.id)
+        getItemsByParentIdFromArray2(item.id)
       }
-      hasNestedItems={(item) => item.type == Type.parent }
+      getIcon={(item) => item.icon}
+      hasNestedItems={(item) => item.type == Type.parent}
       isEqual={(item, item2) => item?.id === item2?.id}
       isSeparator={(item) => item.type == Type.separator}
       placeholder="Choose item"
-      onChange={setItem}/>
+      onChange={setItem2}
+/>
 ```
 
 ### Input properties:
@@ -54,10 +64,13 @@ For making the select generic:
   - isSeparator: The way how the select can decide if an item is a parent item or not 
   - placeholder: The text when nothing is selected 
   - onChange: the callback function for selecting a new item
+  - archor: Original archor of popover.
+  - transform: Orifinal transform of popover.
+  - getIcon: The way how the select can get the icon of the item. Optional.
 
 ### Using
 
-An example usecase is provided in the App.tsx file. That can be changed, the way the user would like.
+An example usecase is provided in the App.tsx file. That can be changed, the way the user would like. There are two type of select, one with icons, and another without.
 
 ### Style
 

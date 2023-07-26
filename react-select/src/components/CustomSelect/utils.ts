@@ -7,6 +7,7 @@ export const useSelect = <TItem = string>({
   placeholder,
   initialItems,
   getNestedItems,
+  getIcon,
   hasNestedItems,
   onChange,
   getItemLabel,
@@ -26,6 +27,12 @@ export const useSelect = <TItem = string>({
   const label = useMemo(() => {
     if (!selectedItem) return placeholder;
     return getItemLabel(selectedItem);
+  }, [getItemLabel, placeholder, selectedItem]);
+
+  const icon = useMemo(() => {
+    if (!selectedItem)
+      return null;
+    return getIcon ? getIcon(selectedItem) : null;
   }, [getItemLabel, placeholder, selectedItem]);
 
   const handleGetNestedItems = useCallback(
@@ -49,7 +56,7 @@ export const useSelect = <TItem = string>({
     [isEqual, selectedItems],
   );
 
-  const handleClickItem = useCallback(
+  const handleHoverItem = useCallback(
     (item: TItem, level: number) => () => {
       // Remove all items from $level++
       setRenderingItems((prev) =>
@@ -69,10 +76,17 @@ export const useSelect = <TItem = string>({
 
       if (hasNestedItems(item, level)) {
         handleGetNestedItems(item, level + 1);
-      } else {
+      }
+    },
+    [handleGetNestedItems, hasNestedItems, onChange, toggle],
+  );
+
+  const handleClickItem = useCallback(
+    (item: TItem, level: number) => () => {
+      if (!hasNestedItems(item, level)) {
         setSelectedItem(item);
         onChange?.(item);
-        toggle();
+        toggle(false);
       }
     },
     [handleGetNestedItems, hasNestedItems, onChange, toggle],
@@ -81,9 +95,11 @@ export const useSelect = <TItem = string>({
   return {
     open,
     label,
+    icon,
     renderingItems,
     toggle,
     handleClickItem,
+    handleHoverItem,
     isSelectedItem,
   };
 };

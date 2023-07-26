@@ -41,19 +41,43 @@ export function CustomSelectComponent<TItem = string>({
     null
   )
 
-  const handleApprovePopoverOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-    toggle(true);
+  const [opened, setOpened] = useState<boolean | null>(
+    false
+  )
+
+  function timeout(delay: number) {
+    return new Promise(res => setTimeout(res, delay));
+  }
+
+  const handlePopoverOpen = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    if (!open) {
+      setOpened(false);
+      setAnchorEl(event.currentTarget);
+      toggle(true);
+      await timeout(1000);
+      setOpened(true);
+    }
+  }
+
+  const handlePopoverClose = () => {
+    if (open && opened) {
+      toggle(false);
+      setOpened(false)
+      setAnchorEl(null);
+    }
   }
 
   const classesNames = useClassNames(classes);
 
   return (
-    <Box className={classesNames.root()} onClick={() => toggle(false)} >
-      <Box className={classesNames.overlay(open)} />
-      <Button className={classesNames.selectionHeader()} onMouseEnter={handleApprovePopoverOpen}>
-        {icon} {label}
-      </Button>
+    <Box className={classesNames.root()} onClick={() => toggle(false)}>
+      <Box className={classesNames.overlay(open)}
+      />
+      <Box className="button-box">
+        <Button className={classesNames.selectionHeader()} onMouseEnter={handlePopoverOpen}>
+          {icon} {label}
+        </Button>
+      </Box>
       {renderingItems && (
         <Box className={classesNames.selectionEntries(open)}>
           <Popover
@@ -61,7 +85,7 @@ export function CustomSelectComponent<TItem = string>({
             transformOrigin={transform}
             anchorEl={anchorEl}
             open={open}>
-            <Box className="flex flex-row" onMouseLeave={() => toggle(false)}>
+            <Box className="flex flex-row" onMouseLeave={handlePopoverClose}>
               {Object.keys(renderingItems).map((level: string) => (
                 <List
                   key={`entry-level-${level}`}
@@ -118,3 +142,7 @@ const CustomSelect = memo(
 CustomSelect.displayName = 'CustomSelect';
 
 export default CustomSelect;
+
+function timeout(arg0: number) {
+  throw new Error('Function not implemented.');
+}
